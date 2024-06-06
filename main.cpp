@@ -82,6 +82,7 @@ int main() {
             output = cipher.byWordEncode(seed, input);
             cout << "* " << output << " \n" << endl;
             cipher.setKey(" ");
+            tableGen = false;
         }
         else if (menu == "6") { // decode by word
             cout << "\nEnter seed: ";
@@ -95,6 +96,7 @@ int main() {
             output = cipher.byWordDecode(seed, input);
             cout << "* " << output << " \n" << endl;
             cipher.setKey(" ");
+            tableGen = false;
         }
         else if (menu == "7") { // exit
             running = false;
