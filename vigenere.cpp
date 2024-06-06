@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <unordered_set>
 
 #include "vigenere.h"
 
@@ -14,6 +17,18 @@ void warmTable (char table[28][27]) {
     }}
 }
 
+vigenere::vigenere() {
+    std::ifstream file("pool.txt");
+    std::string word;
+    int i = 0;
+    while (file >> word) {
+        keyPool[i] = word;
+        i++;
+    }
+    
+    file.close();
+}
+
 void vigenere::printTable() {
     for (int i = 0; i < 28; i++) {
         for (int ii = 0; ii < 27; ii++) {
@@ -25,9 +40,26 @@ void vigenere::printTable() {
 std::string vigenere::getKey() {
     return internalKey;
 }
+void vigenere::setKey(std::string _key) {
+    internalKey = _key;
+}
+
+std::string removeDuplicates(std::string& text) {
+    std::unordered_set<char> seen;
+    std::string result;
+
+    for (char ch : text) {
+        if (seen.find(ch) == seen.end()) {
+            seen.insert(ch);
+            result += ch;
+        }}
+
+    return result;
+}
 
 void vigenere::generateTable(std::string key) {
     warmTable(table);
+    key = removeDuplicates(key);
     internalKey = key;
 
     // add top and bottom alphabets for reference
@@ -90,10 +122,10 @@ void vigenere::generateTable(std::string key) {
     }
 }
 
-std::string vigenere::encode(std::string text) {
+std::string vigenere::encode(std::string text, int& memory) {
     int textSize = text.length();
     int keySize = internalKey.length();
-    int keyIndex = 0;
+    int keyIndex = memory;
     int col;
     int row;
     std::string result = "";
@@ -131,10 +163,10 @@ std::string vigenere::encode(std::string text) {
     
     return result;
 }
-std::string vigenere::decode(std::string text) {
+std::string vigenere::decode(std::string text, int& memory) {
     int textSize = text.length();
     int keySize = internalKey.length();
-    int keyIndex = 0;
+    int keyIndex = memory;
     int col;
     int row;
     std::string result;
@@ -169,5 +201,64 @@ std::string vigenere::decode(std::string text) {
             keyIndex++;
     }}
     
+    return result;
+}
+
+int generateSeed(std::string key) {
+    int seed = 0;
+
+    int keyLength = key.length();
+    for (int i = 0; i < keyLength; i++) {
+        seed += key[i];
+    }
+    seed = seed * keyLength;
+
+    return seed;
+}
+
+std::string vigenere::byWordEncode(std::string startSeed, std::string text) {
+    std::string result = "";
+    std::string ciphertext = "";
+    int textLength = text.length();
+    int savedPosition = 0;
+    int seed = generateSeed(startSeed);
+    srand(seed);
+    
+    ciphertext = keyPool[rand() % 100];
+    generateTable(ciphertext);
+
+    for(int i = 0; i < textLength; i++) {
+        if (text[i] == ' ') {
+            ciphertext = keyPool[rand() % 100];
+            generateTable(ciphertext);
+        }
+        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '?' || text[i] == '!' || text[i] == '\'') savedPosition--;
+        result += encode(std::string(1, text[i]), savedPosition);
+        savedPosition++;
+    }
+
+    return result;
+}
+std::string vigenere::byWordDecode(std::string startSeed, std::string text) {
+    std::string result = "";
+    std::string ciphertext = "";
+    int textLength = text.length();
+    int savedPosition = 0;
+    int seed = generateSeed(startSeed);
+    srand(seed);
+    
+    ciphertext = keyPool[rand() % 100];
+    generateTable(ciphertext);
+
+    for(int i = 0; i < textLength; i++) {
+        if (text[i] == ' ') {
+            ciphertext = keyPool[rand() % 100];
+            generateTable(ciphertext);
+        }
+        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '?' || text[i] == '!' || text[i] == '\'') savedPosition--;
+        result += decode(std::string(1, text[i]), savedPosition);
+        savedPosition++;
+    }
+
     return result;
 }
