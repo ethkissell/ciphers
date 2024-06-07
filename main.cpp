@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cctype>
 
-#include "vigenere.h"
+#include "./vigenere/vigenere.h"
 using namespace std;
 
 void printMenu(vigenere cipher) {
@@ -14,6 +14,26 @@ void printMenu(vigenere cipher) {
     cout << "5. Encode by word" << endl;
     cout << "6. Decode by word" << endl;
     cout << "7. Exit" << endl;
+}
+
+bool checkInput(string input) {
+    int length = input.length();
+    if (length > 26) {
+        cout << "Please enter a phrase less than 26 characters.\n";
+        return false;
+    } 
+    else if (length == 0) {
+        cout << "Please enter a phrase.\n";
+        return false;
+    }
+
+    for (char c : input) {
+        if (!isalpha(c)) {
+            cout << "Please enter only alphabetic characters.\n";
+            return false;
+    }}
+
+    return true;
 }
 
 int main() {
@@ -33,10 +53,12 @@ int main() {
         if (menu == "1") { // generate new table
             cout << "\nEnter keyphrase, will remove duplicate characters: ";
             getline(cin, input);
-            transform(input.begin(), input.end(), input.begin(),::toupper); 
-
-            cipher.generateTable(input);
-            tableGen = true;
+            if (checkInput(input)) {
+                transform(input.begin(), input.end(), input.begin(),::toupper);
+                cipher.generateTable(input);
+                tableGen = true;
+            }
+            
             cout << "\n";
         }
         else if (menu == "2") { // encode
@@ -66,9 +88,13 @@ int main() {
             }
         }
         else if (menu == "4") { // print table
-            cout << "\n-----------------------------------------------------\n";
-            cipher.printTable();
-            cout << "-----------------------------------------------------\n\n";
+            if (tableGen) {
+                cout << "\n-----------------------------------------------------\n";
+                cipher.printTable();
+                cout << "-----------------------------------------------------\n\n";
+            } else {
+                cout << "\nPlease generate a table.\n\n";
+            }
         }
         else if (menu == "5") { // encode by word
             cout << "\nEnter seed: ";

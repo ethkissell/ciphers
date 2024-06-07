@@ -46,12 +46,13 @@ void vigenere::setKey(std::string _key) {
     internalKey = _key;
 }
 
-std::string removeDuplicates(std::string& text) {
+// remove duplicate characters & spaces from key
+std::string cleanupKey(std::string& text) {
     std::unordered_set<char> seen;
     std::string result;
 
     for (char ch : text) {
-        if (seen.find(ch) == seen.end()) {
+        if (ch != ' ' && seen.find(ch) == seen.end()) {
             seen.insert(ch);
             result += ch;
         }}
@@ -61,7 +62,7 @@ std::string removeDuplicates(std::string& text) {
 
 void vigenere::generateTable(std::string key) {
     warmTable(table);
-    key = removeDuplicates(key);
+    key = cleanupKey(key);
     internalKey = key;
 
     // add top and bottom alphabets for reference
