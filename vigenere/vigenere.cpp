@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <cctype>
 #include <unordered_set>
 
 #include "vigenere.h"
@@ -19,7 +20,7 @@ void warmTable (char table[28][27]) {
 
 // default constructure creates pool of keys for byWord encryption/decryption
 vigenere::vigenere() {
-    std::ifstream file("pool.txt");
+    std::ifstream file("vigenere/pool.txt");
     std::string word;
     int i = 0;
     while (file >> word) {
@@ -140,7 +141,7 @@ std::string vigenere::encode(std::string text, int& memory) {
             keyIndex = 0;
 
         // add special characters
-        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '?' || text[i] == '!' || text[i] == '\'') result += text[i];
+        if (!isalpha(text[i])) result += text[i];
         else {
             // get column using key
             for (int ii = 1; ii < 27; ii++) {
@@ -178,7 +179,7 @@ std::string vigenere::decode(std::string text, int& memory) {
             keyIndex = 0;
 
         // add special characters
-        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '?' || text[i] == '!' || text[i] == '\'') result += text[i];
+        if (!isalpha(text[i])) result += text[i];
         else {
             // get row from key
             for (int ii = 1; ii < 27; ii++) {
@@ -232,9 +233,11 @@ std::string vigenere::byWordEncode(std::string startSeed, std::string text) {
             ciphertext = keyPool[rand() % 100];
             generateTable(ciphertext);
         }
-        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '?' || text[i] == '!' || text[i] == '\'') savedPosition--;
-        result += encode(std::string(1, text[i]), savedPosition);
-        savedPosition++;
+
+        if (isalpha(text[i])) {
+            result += encode(std::string(1, text[i]), savedPosition);
+            savedPosition++;
+        } else result += text[i];
     }
 
     return result;
@@ -255,9 +258,10 @@ std::string vigenere::byWordDecode(std::string startSeed, std::string text) {
             ciphertext = keyPool[rand() % 100];
             generateTable(ciphertext);
         }
-        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '?' || text[i] == '!' || text[i] == '\'') savedPosition--;
-        result += decode(std::string(1, text[i]), savedPosition);
-        savedPosition++;
+        if (isalpha(text[i])) {
+            result += decode(std::string(1, text[i]), savedPosition);
+            savedPosition++;
+        } else result += text[i];
     }
 
     return result;

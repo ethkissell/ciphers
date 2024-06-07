@@ -99,30 +99,38 @@ int main() {
         else if (menu == "5") { // encode by word
             cout << "\nEnter seed: ";
             getline(cin, seed);
-            transform(seed.begin(), seed.end(), seed.begin(),::toupper);
+            if (seed.length() == 0) {
+                cout << "Seed must contain at least one character.\n\n";
+            } else {
+                transform(seed.begin(), seed.end(), seed.begin(),::toupper);
 
-            cout << "Enter text to encode: ";
-            getline(cin, input);
-            transform(input.begin(), input.end(), input.begin(),::toupper);
+                cout << "Enter text to encode: ";
+                getline(cin, input);
+                transform(input.begin(), input.end(), input.begin(),::toupper);
 
-            output = cipher.byWordEncode(seed, input);
-            cout << "* " << output << " \n" << endl;
-            cipher.setKey(" ");
-            tableGen = false;
+                output = cipher.byWordEncode(seed, input);
+                cout << "* " << output << " \n" << endl;
+                cipher.setKey(" ");
+                tableGen = false;
+            }
         }
         else if (menu == "6") { // decode by word
             cout << "\nEnter seed: ";
             getline(cin, seed);
-            transform(seed.begin(), seed.end(), seed.begin(),::toupper);
+            if (seed.length() == 0) {
+                cout << "Seed must contain at least one character.\n\n";
+            } else {
+                transform(seed.begin(), seed.end(), seed.begin(),::toupper);
 
-            cout << "Enter text to decode: ";
-            getline(cin, input);
-            transform(input.begin(), input.end(), input.begin(),::toupper);
+                cout << "Enter text to decode: ";
+                getline(cin, input);
+                transform(input.begin(), input.end(), input.begin(),::toupper);
 
-            output = cipher.byWordDecode(seed, input);
-            cout << "* " << output << " \n" << endl;
-            cipher.setKey(" ");
-            tableGen = false;
+                output = cipher.byWordDecode(seed, input);
+                cout << "* " << output << " \n" << endl;
+                cipher.setKey(" ");
+                tableGen = false;
+            }
         }
         else if (menu == "7") { // exit
             running = false;
@@ -132,3 +140,5 @@ int main() {
             cout << "\nInvalid input.\n" << endl;
         }}
 }
+
+// no empty seeds
