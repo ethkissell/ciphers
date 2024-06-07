@@ -140,5 +140,3 @@ int main() {
             cout << "\nInvalid input.\n" << endl;
         }}
 }
-
-// no empty seeds

@@ -4,7 +4,7 @@
 #include <cctype>
 #include <unordered_set>
 
-#include "vigenere.h"
+#include "../vigenere/vigenere.h"
 
 // setup tables for logic using comparisons with unused signs to be replaced with characters
 void warmAlphabet (char arr[26]) {
@@ -167,7 +167,7 @@ std::string vigenere::encode(std::string text, int& memory) {
 std::string vigenere::decode(std::string text, int& memory) {
     int textSize = text.length();
     int keySize = internalKey.length();
-    int keyIndex = memory;
+    int keyIndex = memory; // for byWord 
     int col;
     int row;
     std::string result;
@@ -228,12 +228,14 @@ std::string vigenere::byWordEncode(std::string startSeed, std::string text) {
     ciphertext = keyPool[rand() % 100];
     generateTable(ciphertext);
 
+    // if space pick new key from pool and generature new table
     for(int i = 0; i < textLength; i++) {
         if (text[i] == ' ') {
             ciphertext = keyPool[rand() % 100];
             generateTable(ciphertext);
         }
 
+        // else if it is an alphabet character append to result and increment saved position
         if (isalpha(text[i])) {
             result += encode(std::string(1, text[i]), savedPosition);
             savedPosition++;
@@ -253,11 +255,14 @@ std::string vigenere::byWordDecode(std::string startSeed, std::string text) {
     ciphertext = keyPool[rand() % 100];
     generateTable(ciphertext);
 
+    // if space pick new key from pool and generature new table
     for(int i = 0; i < textLength; i++) {
         if (text[i] == ' ') {
             ciphertext = keyPool[rand() % 100];
             generateTable(ciphertext);
         }
+
+        // else if it is an alphabet character append to result and increment saved position
         if (isalpha(text[i])) {
             result += decode(std::string(1, text[i]), savedPosition);
             savedPosition++;
