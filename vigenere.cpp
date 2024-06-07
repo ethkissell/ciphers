@@ -17,6 +17,7 @@ void warmTable (char table[28][27]) {
     }}
 }
 
+// default constructure creates pool of keys for byWord encryption/decryption
 vigenere::vigenere() {
     std::ifstream file("pool.txt");
     std::string word;
@@ -37,6 +38,7 @@ void vigenere::printTable() {
                 std::cout << "\n";
     }}
 }
+
 std::string vigenere::getKey() {
     return internalKey;
 }
@@ -153,9 +155,6 @@ std::string vigenere::encode(std::string text, int& memory) {
                     break;
             }}
 
-            // print encoded letter
-            // cout << table[row][col] << endl;
-
             // append encoded letter to result and shift along key
             result += table[row][col];
             keyIndex++;
@@ -204,12 +203,12 @@ std::string vigenere::decode(std::string text, int& memory) {
     return result;
 }
 
-int generateSeed(std::string key) {
-    int seed = 0;
+unsigned int generateSeed(std::string key) {
+    unsigned int seed = 0;
 
     int keyLength = key.length();
     for (int i = 0; i < keyLength; i++) {
-        seed += key[i];
+        seed += key[i]; // add decimal ascii together
     }
     seed = seed * keyLength;
 
@@ -221,7 +220,7 @@ std::string vigenere::byWordEncode(std::string startSeed, std::string text) {
     std::string ciphertext = "";
     int textLength = text.length();
     int savedPosition = 0;
-    int seed = generateSeed(startSeed);
+    unsigned int seed = generateSeed(startSeed);
     srand(seed);
     
     ciphertext = keyPool[rand() % 100];
@@ -244,7 +243,7 @@ std::string vigenere::byWordDecode(std::string startSeed, std::string text) {
     std::string ciphertext = "";
     int textLength = text.length();
     int savedPosition = 0;
-    int seed = generateSeed(startSeed);
+    unsigned int seed = generateSeed(startSeed);
     srand(seed);
     
     ciphertext = keyPool[rand() % 100];

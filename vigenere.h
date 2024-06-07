@@ -20,7 +20,6 @@ class vigenere {
 
         std::string getKey();
         void setKey(std::string _key);
-
 };
 
 #endif
