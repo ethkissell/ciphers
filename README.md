@@ -72,6 +72,14 @@ Keep moving the character to the end of the string and rewriting until you have 
 | Y | Y | Z | S | E | C | R | T | A | B | D | F | G | H | I | J | K | L | M | N | O | P | Q | U | V | W | X |
 | Z | Z | S | E | C | R | T | A | B | D | F | G | H | I | J | K | L | M | N | O | P | Q | U | V | W | X | Y |
 
+To use the table you take your plaintext and align it with your key repeating the key when necessary. Using the table you use the first character of your plaintext to align with the Alphabet on the top or bottom; then using the first character of the key you align with the Alphabet on the side. Using the table like a cartesian plane with the plaintext serving as x, and the key serving as y you find the character that they match to.
+
+### Example
+
+- HIDDEN MESSAGE : plaintext
+- SECRTS ECRTSEC : key
+- ZJAUXA NBGIPHB : encoded text
+
 ## PROGRAM OPTIONS
 
 ### REGULAR
