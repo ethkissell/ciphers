@@ -205,7 +205,7 @@ std::string vigenere::decode(std::string text, int& memory) {
     return result;
 }
 
-unsigned int generateSeed(std::string key) {
+unsigned int generateSeedVigenere(std::string key) {
     unsigned int seed = 0;
 
     int keyLength = key.length();
@@ -222,7 +222,7 @@ std::string vigenere::byWordEncode(std::string startSeed, std::string text) {
     std::string ciphertext = "";
     int textLength = text.length();
     int savedPosition = 0;
-    unsigned int seed = generateSeed(startSeed);
+    unsigned int seed = generateSeedVigenere(startSeed);
     srand(seed);
     
     ciphertext = keyPool[rand() % 100];
@@ -249,7 +249,7 @@ std::string vigenere::byWordDecode(std::string startSeed, std::string text) {
     std::string ciphertext = "";
     int textLength = text.length();
     int savedPosition = 0;
-    unsigned int seed = generateSeed(startSeed);
+    unsigned int seed = generateSeedVigenere(startSeed);
     srand(seed);
     
     ciphertext = keyPool[rand() % 100];

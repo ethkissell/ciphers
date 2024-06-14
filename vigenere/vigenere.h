@@ -12,6 +12,7 @@ class vigenere {
 
         void printTable();
         void generateTable(std::string key);
+        
         std::string encode(std::string text, int& memory);
         std::string decode(std::string text, int& memory);
 
